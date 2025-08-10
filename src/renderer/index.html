@@ -10,6 +10,11 @@
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
+    <meta http-equiv="Content-Security-Policy" 
+      content="default-src 'self'; 
+               script-src 'self' 'unsafe-inline'; 
+               style-src 'self' 'unsafe-inline'; 
+               img-src 'self' data: file:;">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prueba electron</title>
     <link rel="stylesheet" href="style.css">
@@ -19,26 +24,60 @@
 <body ng-controller="MainController">
   <header>
     <div class="logo-container">
-      <img src="logo.png" alt="Logo" class="logo">
+      <img src="../static/logo.png" alt="Logo" class="logo">
     </div>
     <h1>{{title}}</h1>
+    <button class="add-button" ng-click="showAddForm = true">+ Añadir Juego</button>
   </header>
 
   <main>
-    <div class="game-selector">
-      <select ng-model="selectedGame" ng-options="game as game for game in games">
-        <option value="">Selecciona un juego</option>
-      </select>
-      
-      <div class="game-preview" ng-if="selectedGame">
-        <img ng-src="{{ games.find(g => g === selectedGame).image || 'placeholder.png' }}" 
-             alt="{{ selectedGame }}" 
-             class="game-image">
-        <button ng-click="playGame()" class="play-button">Jugar</button>
+    <div class="games-grid">
+      <div class="game-card" ng-repeat="game in games" ng-click="playGame(game)">
+        <!-- Cambiar la carga de imágenes -->
+          <div class="game-image-container">
+            <img ng-if="game.imageLoaded" 
+                ng-src="{{game.imageData}}" 
+                alt="{{game.name}}" 
+                class="game-image">
+            <div class="placeholder" ng-if="!game.imageLoaded"></div>
+          </div>
+        <div class="game-title">{{game.name}}</div>
       </div>
     </div>
   </main>
 
-  
+  <!-- Modal para añadir juego -->
+  <div class="modal" ng-if="showAddForm">
+    <div class="modal-content">
+      <h2>Añadir Nuevo Juego</h2>
+      <div class="form-group">
+        <label>Nombre:</label>
+        <input type="text" ng-model="newGame.name">
+      </div>
+      <div class="form-group">
+        <label>Ejecutable:</label>
+        <button class="select-button" ng-click="selectExe()">
+          {{newGame.exePath ? 'Cambiar' : 'Seleccionar .exe'}}
+        </button>
+        <span class="file-path" ng-if="newGame.exePath">
+          {{newGame.exePath.split('\\').pop()}}
+        </span>
+      </div>
+      <div class="form-group">
+        <label>Imagen (opcional):</label>
+        <input type="file" accept="image/*" onchange="angular.element(this).scope().selectImage(event)">
+      </div>
+      <div class="preview" ng-if="newGame.image">
+        <img ng-src="{{newGame.image}}" alt="Vista previa">
+      </div>
+      <div class="modal-actions">
+        <button class="cancel-button" ng-click="showAddForm = false">Cancelar</button>
+        <button class="save-button" ng-click="addGame()">Guardar</button>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>Desarrollado por VagrantTrack149</p>
+  </footer>
 </body>
 </html>

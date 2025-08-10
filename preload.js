@@ -1,7 +1,15 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  readDir: (path) => ipcRenderer.invoke('read-dir', path),
-  getGameImage: (gameName) => ipcRenderer.invoke('get-game-image', gameName),
-  executeGame: (path) => ipcRenderer.invoke('execute-game', path)
+  getGames: () => ipcRenderer.invoke('get-games'),
+  addGame: (gameData) => ipcRenderer.invoke('add-game', gameData),
+  executeGame: (exePath) => ipcRenderer.invoke('execute-game', exePath),
+  openFileDialog: () => ipcRenderer.invoke('open-file-dialog'),
+  convertImageToBase64: (filePath) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.readAsDataURL(filePath);
+    });
+  }
 });
