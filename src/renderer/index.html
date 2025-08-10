@@ -11,12 +11,13 @@
       content="default-src 'self'; script-src 'self'"
     />
     <meta http-equiv="Content-Security-Policy" 
-      content="default-src 'self'; 
-               script-src 'self' 'unsafe-inline'; 
-               style-src 'self' 'unsafe-inline'; 
-               img-src 'self' data: file:;">
+          content="default-src 'self' 'unsafe-inline' file: data:;
+                   script-src 'self' 'unsafe-inline' 'unsafe-eval';
+                   style-src 'self' 'unsafe-inline';
+                   img-src 'self' data: file: *;
+                   connect-src 'self' file: data:;">
+    <title>Menú de Videojuegos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prueba electron</title>
     <link rel="stylesheet" href="style.css">
     <script src="../../node_modules/angular/angular.min.js"></script>
     <script src="app.js"></script>
@@ -70,10 +71,10 @@
       <div class="preview" ng-if="newGame.image">
         <img ng-src="{{newGame.image}}" alt="Vista previa">
       </div>
-      <div class="modal-actions">
-        <button class="cancel-button" ng-click="showAddForm = false">Cancelar</button>
-        <button class="save-button" ng-click="addGame()">Guardar</button>
-      </div>
+       <div class="modal-actions">
+            <button class="cancel-button" ng-click="closeModal()">Cancelar</button>
+            <button class="save-button" ng-click="addGame()">Guardar</button>
+        </div>
     </div>
   </div>
   <footer>

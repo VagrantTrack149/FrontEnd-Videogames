@@ -14,9 +14,11 @@ const createWindow = () => {
     width: 1200,
     height: 800,
     webPreferences: {
-      preload: 'preload.js',
-      contextIsolation: true,
-      nodeIntegration: false
+      preload: 'D:/Documentos/FrontEnd/preload.js',
+            contextIsolation: true,
+            nodeIntegration: false,
+            webSecurity: false,
+            sandbox: true
     }
   });
 
@@ -76,14 +78,25 @@ app.whenReady().then(() => {
     });
   });
 
-  // Abrir diálogo para seleccionar ejecutable
-  ipcMain.handle('open-file-dialog', async () => {
-    const { canceled, filePaths } = await dialog.showOpenDialog({
-      properties: ['openFile'],
-      filters: [{ name: 'Ejecutables', extensions: ['exe'] }]
+ // Handler para abrir diálogo de archivos
+    ipcMain.handle('open-file-dialog', async () => {
+        const { canceled, filePaths } = await dialog.showOpenDialog({
+            properties: ['openFile'],
+            filters: [
+                { name: 'Ejecutables', extensions: ['exe', 'lnk', 'app', 'sh'] },
+                { name: 'Todos los archivos', extensions: ['*'] }
+            ]
+        });
+        return canceled ? null : filePaths[0];
     });
-    return canceled ? null : filePaths[0];
-  });
+
+  ipcMain.handle('get-image-path', (event, gameId) => {
+    const imagePath = path.join(gamesFolder, `${gameId}.png`);
+    if (fs.existsSync(imagePath)) {
+        return imagePath;
+    }
+    return null;
+});
 });
 
 app.on('window-all-closed', () => {
