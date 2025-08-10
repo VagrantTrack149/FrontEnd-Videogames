@@ -12,17 +12,33 @@
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prueba electron</title>
-
+    <link rel="stylesheet" href="style.css">
     <script src="../../node_modules/angular/angular.min.js"></script>
     <script src="app.js"></script>
   </head>
 <body ng-controller="MainController">
+  <header>
+    <div class="logo-container">
+      <img src="logo.png" alt="Logo" class="logo">
+    </div>
     <h1>{{title}}</h1>
-    <h1>Hola</h1>
+  </header>
 
-
-    <ul id="file-list">
+  <main>
+    <div class="game-selector">
+      <select ng-model="selectedGame" ng-options="game as game for game in games">
+        <option value="">Selecciona un juego</option>
+      </select>
       
-    </ul>
+      <div class="game-preview" ng-if="selectedGame">
+        <img ng-src="{{ games.find(g => g === selectedGame).image || 'placeholder.png' }}" 
+             alt="{{ selectedGame }}" 
+             class="game-image">
+        <button ng-click="playGame()" class="play-button">Jugar</button>
+      </div>
+    </div>
+  </main>
+
+  
 </body>
 </html>

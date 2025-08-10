@@ -6,7 +6,7 @@ window.electronAPI.readFile().then((files) => {
         fileList.appendChild(li);
     });
 }).catch((error) => {
-    console.error('Error reading directory:', error);
+    console.error('Error leyendo directorios', error);
     const fileList = document.getElementById('file-list');
-    fileList.textContent = 'Error loading files.';
+    fileList.textContent = 'Error cargando archivos.';
 });

@@ -1,7 +1,7 @@
-const {contextBridge, ipcRenderer} = require('electron');
+const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld('electronAPI',{
-    ReadDir: () => ipcRenderer.invoke('read-dir'),
-    ReadFiles: () => ipcRenderer.invoke('read-files'),
-    ExcFile:() =>  ipcRenderer.invoke('exc-file')
+contextBridge.exposeInMainWorld('electronAPI', {
+  readDir: (path) => ipcRenderer.invoke('read-dir', path),
+  getGameImage: (gameName) => ipcRenderer.invoke('get-game-image', gameName),
+  executeGame: (path) => ipcRenderer.invoke('execute-game', path)
 });
