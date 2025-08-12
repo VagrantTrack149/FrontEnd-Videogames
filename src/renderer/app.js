@@ -25,11 +25,19 @@ angular.module('gameMenuApp', [])
             
             // Obtener rutas de imágenes
             $scope.games.forEach(game => {
-                window.electronAPI.getImagePath(game.id).then(imagePath => {
-                    if (imagePath) {
-                        game.imagePath = imagePath;
-                        $scope.$apply();
+                window.electronAPI.getImagePath(game.id).then(imageData => {
+                    if (imageData) {
+                        game.imageData = imageData;
+                        game.imageLoaded=true;
+                    }else{
+                        game.imageData = null;
+                        game.imageLoaded=false;
                     }
+                    $scope.$apply();
+                    //No se, que cosa no sirva, pero creo que no guarda, dejo este comentario para hacerlo luego xd
+                    //tal vez guarde la imagen en base64 en el .json de cada juego
+                    //recordar, rehacer el .json de cada juego para que tenga un campo imageData y hacer que lo lea de ahi.
+                    //ya ni sé, cambiar los colores y demás, pero aun sigo viendo que onda con angular.
                 });
             });
             
@@ -65,20 +73,51 @@ angular.module('gameMenuApp', [])
     $scope.selectImage = function(event) {
         const file = event.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                $scope.$apply(() => {
-                    $scope.newGame.image = e.target.result;
-                });
-            };
-            reader.readAsDataURL(file);
+            windows.electronAPI.saveImage($scope.newGame.id, file);
+            $scope.newGame.image = file;
         }
     };
 
     // Añadir nuevo juego
     $scope.addGame = function() {
+        if($scope.isEditing){
+            $scope.updateGame();
+        }else{
+            if ($scope.newGame.name && $scope.newGame.exePath) {
+                window.electronAPI.addGame({
+                    name: $scope.newGame.name,
+                    exePath: $scope.newGame.exePath,
+                    imageData: $scope.newGame.image
+                }).then(() => {
+                    $scope.closeModal();
+                    $scope.loadGames();
+                });
+            }
+        }
+    };
+
+    // Cerrar modal
+    $scope.closeModal = function() {
+        $scope.showAddForm = false;
+        $scope.newGame = { name: '', exePath: '', image: null };
+    };
+
+    // Editar juego existente
+    $scope.editGame = function(game) {
+        $scope.isEditing = true;
+        $scope.editingGameId = game.id;
+        $scope.newGame = {
+            name: game.name,
+            exePath: game.exePath,
+            image: game.imageData
+        };
+        $scope.showAddForm = true;
+    };
+
+    // Actualizar juego
+    $scope.updateGame = function() {
         if ($scope.newGame.name && $scope.newGame.exePath) {
-            window.electronAPI.addGame({
+            window.electronAPI.updateGame($scope.editingGameId, {
                 name: $scope.newGame.name,
                 exePath: $scope.newGame.exePath,
                 imageData: $scope.newGame.image
@@ -89,10 +128,13 @@ angular.module('gameMenuApp', [])
         }
     };
 
-    // Cerrar modal
-    $scope.closeModal = function() {
-        $scope.showAddForm = false;
-        $scope.newGame = { name: '', exePath: '', image: null };
+    // Eliminar juego
+    $scope.deleteGame = function(game) {
+        if (confirm(`¿Estás seguro de que quieres eliminar "${game.name}"?`)) {
+            window.electronAPI.deleteGame(game.id).then(() => {
+                $scope.loadGames();
+            });
+        }
     };
 
     // Inicializar

@@ -2,6 +2,7 @@
 <html lang="en" ng-app="gameMenuApp">
 <head>
     <meta charset="UTF-8" />
+    <!-- Sigue saliendo el aviso de seguridad xd pero ya ni se como corregirlo-->
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
@@ -33,16 +34,19 @@
 
   <main>
     <div class="games-grid">
-      <div class="game-card" ng-repeat="game in games" ng-click="playGame(game)">
-        <!-- Cambiar la carga de imágenes -->
-          <div class="game-image-container">
-            <img ng-if="game.imageLoaded" 
-                ng-src="{{game.imageData}}" 
-                alt="{{game.name}}" 
-                class="game-image">
+      <div class="game-card" ng-repeat="game in games">
+        <!-- cambio de imagen sistema-->
+        <div class="game-image-container" ng-click="playGame(game)">
+            <img ng-if="game.imageLoaded" ng-src="{{game.imageData}}" alt="{{game.name}}" class="game-image">
             <div class="placeholder" ng-if="!game.imageLoaded"></div>
-          </div>
-        <div class="game-title">{{game.name}}</div>
+        </div>
+        <div class="game-footer">
+            <div class="game-title">{{game.name}}</div>
+            <div class="game-actions">
+                <button class="edit-button" ng-click="editGame(game); $event.stopPropagation()">Editar</button>
+                <button class="delete-button" ng-click="deleteGame(game); $event.stopPropagation()">Borrar</button>
+            </div>
+        </div>
       </div>
     </div>
   </main>
