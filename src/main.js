@@ -120,7 +120,7 @@ app.whenReady().then(() => {
         name:gameData.name,
         exePath: gameData.exePath,
         addedDate: gameData.addedDate,
-        imagePath: imagePath
+        //imagePath: imagePath
       }));
       if (gameData.imageData) {
         //Tengo que rehacerlo no sirve.
