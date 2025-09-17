@@ -1,6 +1,6 @@
 angular.module('gameMenuApp', [])
 .controller('MainController', function($scope, $timeout) {
-    $scope.title = "Menú de Videojuegos";
+    $scope.title = "Solaris Game Menu";
     $scope.games = [];
     $scope.showAddForm = false;
     $scope.newGame = {

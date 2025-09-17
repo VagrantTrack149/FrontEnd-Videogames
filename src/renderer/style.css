@@ -1,8 +1,24 @@
 /* Estilos generales */
+
+/*
+Voy a cambiar estilos para seguir este esquema de colores:
+Negro 
+Morado
+Morado claro
+amarillo huevito xd
+#000000
+#9929EA
+#CC66DA
+#FAEB92
+rgb(0, 0, 0)
+rgb(153, 41, 234)
+rgb(204, 102, 218)
+rgb(250, 235, 146)
+*/
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #2c3e50, #1a1a2e);
-  color: #ecf0f1;
+  background: linear-gradient(210deg, #5a6e85, #060646);
+  color: #dbc9d5;
   margin: 0;
   padding: 20px;
   min-height: 100vh;
@@ -12,9 +28,9 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 15px 30px;
+  padding: 15px 20px;
   background: rgba(0, 0, 0, 0.5);
-  border-radius: 15px;
+  border-radius: 20px;
   margin-bottom: 25px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
@@ -33,7 +49,7 @@ header {
 h1 {
   font-size: 2.8rem;
   margin: 0;
-  color: #f1c40f;
+  color: #f1b80f;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
